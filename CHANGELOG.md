@@ -2,6 +2,10 @@
 
 All changes made to this project will be noted in this file.
 
+### 0.3.1
+
+- Reduced branching in `rcrypt::verify`
+
 ## 0.3.0
 
 - Fixed panic when a corrupted hash is passed to `rcrypt::verify`
@@ -11,7 +15,6 @@ All changes made to this project will be noted in this file.
 
 ## 0.2.0
 
-- Fixed hash generation for hashes with a cost of 9
 - Added `hash_with_salt` for adding custom salts
 
 ## 0.1.1

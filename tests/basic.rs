@@ -14,3 +14,10 @@ fn hash_and_verify_custom_salt() {
     let hash: Vec<u8> = rcrypt::hash_with_salt(&mypass, DEFAULT_COST, b"abcdefgh12345678").unwrap();
     assert!(rcrypt::verify(&mypass, &hash).unwrap());
 }
+
+#[test]
+fn hash_and_verify_cost_9() {
+    let mypass = String::from("pass123");
+    let hash: Vec<u8> = rcrypt::hash(&mypass, 9).unwrap();
+    assert!(rcrypt::verify(&mypass, &hash).unwrap());
+}

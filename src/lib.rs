@@ -184,13 +184,9 @@ mod algorithm {
                 costint
             )));
         }
-        if costint < 9 {
-            st.push(b'0');
-            st.push(costint + 48);
-        } else {
-            st.push((costint / 10) + 48);
-            st.push((costint % 10) + 48);
-        }
+        // push cost
+        st.push((costint / 10) + 48);
+        st.push((costint % 10) + 48);
         st.push(b'$');
         // get salt
         let salt = base64::encode_config(&input[1..17], base64::BCRYPT);
