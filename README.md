@@ -4,13 +4,13 @@
 
 `rcrypt`, short for "reduced crypt" is a compact hashing and salting library based on bcrypt **generating hashes that are 33.3% smaller than bcrypt** (40 bytes over 60 bytes).
 
-It was originally made for
-a part of [Skytable](https://github.com/skytable/skytable)'s authentication system storage, but
-was moved into a separate library for usage in the wider Rust community.
+It was originally made for a part of [Skytable](https://github.com/skytable/skytable)'s authentication
+system storage, but was moved into a separate library for usage in the wider Rust community.
 `rcrypt` is almost a drop-in replacement for the `bcrypt` crate.
 
 The smaller hash sizes are achieved by rcrypt's
-implementation of a hash+salt compression/decompression algorithm based on the [BMCF spec](https://github.com/ademarre/binary-mcf). The hashes produced are binary hashes.
+implementation of a segment compression/decompression algorithm, that compresses segments of the MCF hash
+based on the [BMCF spec](https://github.com/ademarre/binary-mcf). The hashes produced are binary hashes.
 
 ## Usage
 

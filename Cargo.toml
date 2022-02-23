@@ -1,6 +1,6 @@
 [package]
 name = "rcrypt"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Sayan Nandan <nandansayan@outlook.com>"]
 license = "Apache-2.0"
@@ -9,6 +9,8 @@ homepage = "https://github.com/ohsayan/rcrypt"
 documentation = "https://docs.rs/rcrypt"
 repository = "https://github.com/ohsayan/rcrypt"
 readme = "README.md"
+categories = ["cryptography", "algorithms"]
+keywords = ["bcrypt", "hash", "salt", "bmcf", "mcf"]
 
 [dependencies]
 base64 = "0.13.0"

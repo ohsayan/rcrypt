@@ -19,13 +19,14 @@
 //! `rcrypt`, short for "reduced crypt" is a more compact alternative to bcrypt,
 //! generating **hashes that are 33.3% smaller** (40 bytes vs 60 bytes) than bcrypt.
 //!
-//! To achieve this, rcrypt makes use of hash and salt compression, where the
-//! hash and salt are compressed according to the
+//! To achieve this, rcrypt compresses segments of the hash, in accordance with the
 //! [BMCF specification](https://github.com/ademarre/binary-mcf).
 //! After applying the compression algorithm implemented in this crate, the
 //! 60 byte bcrypt hash is compressed into a 40 byte long binary hash, that
-//! is returned as a [`Vec<u8>`]. This is a very simple example that you can use
-//! for conveniently hashing and salting passwords:
+//! is returned as a [`Vec<u8>`].
+//!
+//! This is a very simple example that you can use for conveniently hashing and
+//! salting passwords:
 //! ```
 //! let password = String::from("pass123");
 //!	let hash = rcrypt::hash(&password, rcrypt::DEFAULT_COST).unwrap();
@@ -180,6 +181,7 @@ mod error {
     /// Errors that can result when hashing, salting, verifying, compressing
     /// or decompressing `rcrypt` hashes
     pub enum RcryptError {
+        /// The hash is corrupted. The description is given in the tuple field
         CorruptedHash(String),
         /// The hash has the wrong size
         WrongSize(usize),
