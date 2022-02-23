@@ -1,6 +1,10 @@
-# `rcrypt`: A compact hashing and salting library based on bcrypt with smaller hashes
+# `rcrypt`: A compact hashing and salting library
 
-`rcrypt`, short for "reduced crypt" is a compact hashing and salting library based on bcrypt **generating hashes that are 33.3% smaller than bcrypt**. It was originally made for
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ohsayan/rcrypt/Test?label=tests&logo=rust&style=flat-square) [![Crates.io](https://img.shields.io/crates/v/rcrypt?style=flat-square)](https://crates.io/crates/rcrypt) [![docs.rs](https://img.shields.io/docsrs/rcrypt?style=flat-square)](https://docs.rs/rcrypt) [![Crates.io](https://img.shields.io/crates/l/rcrypt?style=flat-square)](./LICENSE)
+
+`rcrypt`, short for "reduced crypt" is a compact hashing and salting library based on bcrypt **generating hashes that are 33.3% smaller than bcrypt** (40 bytes over 60 bytes).
+
+It was originally made for
 a part of [Skytable](https://github.com/skytable/skytable)'s authentication system storage, but
 was moved into a separate library for usage in the wider Rust community.
 `rcrypt` is almost a drop-in replacement for the `bcrypt` crate.
