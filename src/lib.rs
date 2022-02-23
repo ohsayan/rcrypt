@@ -48,9 +48,22 @@ pub const DEFAULT_COST: u32 = 12;
 pub use crate::error::{RcryptError, RcryptResult};
 
 /// Hash and salt the provided password with the given cost. If you don't know
-/// which cost to use, use the [`DEFAULT_COST`]
+/// which cost to use, use the [`DEFAULT_COST`]. The OS randomness is used to
+/// generate the salt
 pub fn hash<T: AsRef<[u8]>>(password: T, cost: u32) -> RcryptResult<Vec<u8>> {
     let bcrypt_hash = bcrypt::hash(password, cost)?;
+    let compressed_hash = crate::algorithm::encode_into_bmcf(&bcrypt_hash)?;
+    Ok(compressed_hash)
+}
+
+/// Hash and salt the provided password with the given cost and salt. If you don't know
+/// which cost to use, use the [`DEFAULT_COST`]
+pub fn hash_with_salt<T: AsRef<[u8]>>(
+    password: T,
+    cost: u32,
+    salt: &[u8],
+) -> RcryptResult<Vec<u8>> {
+    let bcrypt_hash = bcrypt::hash_with_salt(password, cost, salt)?.to_string();
     let compressed_hash = crate::algorithm::encode_into_bmcf(&bcrypt_hash)?;
     Ok(compressed_hash)
 }
