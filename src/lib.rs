@@ -19,7 +19,7 @@
 //! `rcrypt`, short for "reduced crypt" is a more compact alternative to bcrypt,
 //! generating **hashes that are 33.3% smaller** (40 bytes vs 60 bytes) than bcrypt.
 //!
-//! To achieve this, rcrypt compresses segments of the hash, in accordance with the
+//! To achieve this, rcrypt compresses fields of the hash, in accordance with the
 //! [BMCF specification](https://github.com/ademarre/binary-mcf).
 //! After applying the compression algorithm implemented in this crate, the
 //! 60 byte bcrypt hash is compressed into a 40 byte long binary hash, that
@@ -86,19 +86,24 @@ pub mod bmcf {
 }
 
 mod algorithm {
-    const EXPECTED_PARTS: usize = 3;
     use crate::{RcryptError, RcryptResult};
+
+    const EXPECTED_PARTS: usize = 3;
+    const RCRYPT_EXPECTED_SIZE: usize = 40;
+    const BCRYPT_EXPECTED_SIZE: usize = 60;
+    const BCRYPT_EXPECTED_SIZE_SALTDIGEST: usize = 53;
+    const BCRYPT_EXPECTED_SIZE_FIELDS: usize = 2;
 
     /// Encode an MCF hash into BMCF. This is the core compression algorithm
     /// used by rcrypt
     pub fn encode_into_bmcf(input: &str) -> RcryptResult<Vec<u8>> {
-        if input.len() != 60 {
-            return Err(RcryptError::WrongSize(input.len()));
+        if input.len() != BCRYPT_EXPECTED_SIZE {
+            return Err(RcryptError::WrongSize(BCRYPT_EXPECTED_SIZE, input.len()));
         }
         if input.as_bytes()[0] != b'$' {
-            return Err(RcryptError::UnsupportedHash(input.as_bytes()[0]));
+            return Err(RcryptError::UnsupportedHashPrefix(input.as_bytes()[0]));
         }
-        let mut buf: Vec<u8> = Vec::with_capacity(40);
+        let mut buf: Vec<u8> = Vec::with_capacity(RCRYPT_EXPECTED_SIZE);
         let parts: Vec<&str> = input.split('$').filter(|s| !s.is_empty()).collect();
         if parts.len() != EXPECTED_PARTS {
             return Err(RcryptError::CorruptedHash(format!(
@@ -107,11 +112,20 @@ mod algorithm {
             )));
         }
         match (parts[0].len(), parts[1].len(), parts[2].len()) {
-            (2, 2, 53) => {}
+            (
+                BCRYPT_EXPECTED_SIZE_FIELDS,
+                BCRYPT_EXPECTED_SIZE_FIELDS,
+                BCRYPT_EXPECTED_SIZE_SALTDIGEST,
+            ) => {}
             (p1l, p2l, p3l) => {
                 return Err(RcryptError::CorruptedHash(format!(
-                    "Expected 3 parts with lengths 2, 2, 53. Found lengths {}, {} and {} instead",
-                    p1l, p2l, p3l
+                    "Expected 3 parts with lengths {}, {}, {}. Found lengths {}, {} and {} instead",
+                    BCRYPT_EXPECTED_SIZE_FIELDS,
+                    BCRYPT_EXPECTED_SIZE_FIELDS,
+                    BCRYPT_EXPECTED_SIZE_SALTDIGEST,
+                    p1l,
+                    p2l,
+                    p3l
                 )))
             }
         }
@@ -145,7 +159,10 @@ mod algorithm {
     /// Decode a BMCF hash into MCF. This is the core decompression algorithm
     /// used by rcrypt
     pub fn decode_into_mcf(input: &[u8]) -> RcryptResult<String> {
-        let mut st: Vec<u8> = Vec::with_capacity(60);
+        if input.len() != RCRYPT_EXPECTED_SIZE {
+            return Err(RcryptError::WrongSize(RCRYPT_EXPECTED_SIZE, input.len()));
+        }
+        let mut st: Vec<u8> = Vec::with_capacity(BCRYPT_EXPECTED_SIZE);
         st.push(b'$');
         // get scheme
         let header_octet = input[0];
@@ -196,10 +213,10 @@ mod error {
     pub enum RcryptError {
         /// The hash is corrupted. The description is given in the tuple field
         CorruptedHash(String),
-        /// The hash has the wrong size
-        WrongSize(usize),
-        /// The hash is unsupported
-        UnsupportedHash(u8),
+        /// The hash has the wrong size (expected, present)
+        WrongSize(usize, usize),
+        /// The hash prefix is unsupported
+        UnsupportedHashPrefix(u8),
         /// The cost of the hash is incorrect
         BadCost(String),
         /// Unknown scheme
@@ -230,9 +247,9 @@ mod error {
                 RcryptError::BcryptError(e) => write!(f, "bcrypt error: {}", e),
                 RcryptError::CorruptedHash(e) => write!(f, "corrupted hash: {}", e),
                 RcryptError::UnknownScheme(e) => write!(f, "unknown scheme: {}", e),
-                RcryptError::UnsupportedHash(p) => write!(f, "unsupported prefix: {}", p),
-                RcryptError::WrongSize(sz) => {
-                    write!(f, "wrong hash size. expected 60 bytes, found {}", sz)
+                RcryptError::UnsupportedHashPrefix(p) => write!(f, "unsupported prefix: {}", p),
+                RcryptError::WrongSize(esz, sz) => {
+                    write!(f, "wrong hash size. expected {} bytes, found {}", esz, sz)
                 }
             }
         }

@@ -9,7 +9,7 @@ system storage, but was moved into a separate library for usage in the wider Rus
 `rcrypt` is almost a drop-in replacement for the `bcrypt` crate.
 
 The smaller hash sizes are achieved by rcrypt's
-implementation of a segment compression/decompression algorithm, that compresses segments of the MCF hash
+implementation of a segment compression/decompression algorithm, that compresses fields of the MCF hash
 based on the [BMCF spec](https://github.com/ademarre/binary-mcf). The hashes produced are binary hashes.
 
 ## Usage
