@@ -1,0 +1,15 @@
+[package]
+name = "rcrypt"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sayan Nandan <nandansayan@outlook.com>"]
+license = "Apache-2.0"
+description = "A compact hashing/salting library based on bcrypt with smaller hashes"
+homepage = "https://github.com/ohsayan/rcrypt"
+documentation = "https://docs.rs/rcrypt"
+repository = "https://github.com/ohsayan/rcrypt"
+readme = "README.md"
+
+[dependencies]
+base64 = "0.13.0"
+bcrypt = "0.10.1"
