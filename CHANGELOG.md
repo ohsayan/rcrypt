@@ -2,9 +2,13 @@
 
 All changes made to this project will be noted in this file.
 
-### 0.3.1
+### 0.4.0
 
-- Reduced branching in `rcrypt::verify`
+- `rcrypt::hash` now directly produces hashes instead of encoding into base64 and back
+- (BREAKING): `RcryptError::BcryptError` was removed
+- (BREAKING): `RcryptError::BadCost` is now `BadDecodedCost`
+- New variants in `RcryptError`: `DisallowedCost`, `BadPassword`, `RngError` and `BadSalt`
+- `rcrypt` now uses its own `bcrypt` implementation
 
 ## 0.3.0
 

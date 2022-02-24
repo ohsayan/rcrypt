@@ -98,7 +98,7 @@ mod error {
         /// The hash prefix is unsupported
         UnsupportedHashPrefix(u8),
         /// The cost of the hash is incorrect
-        BadCost(String),
+        BadDecodedCost(String),
         /// The cost is not allowed
         DisallowedCost(u32),
         /// Unknown scheme
@@ -133,7 +133,7 @@ mod error {
     impl fmt::Display for RcryptError {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
             match self {
-                RcryptError::BadCost(c) => write!(f, "failed to decode cost: {}", c),
+                RcryptError::BadDecodedCost(c) => write!(f, "failed to decode cost: {}", c),
                 RcryptError::Base64Error(e) => write!(f, "base64 decode error: {}", e),
                 RcryptError::CorruptedHash(e) => write!(f, "corrupted hash: {}", e),
                 RcryptError::UnknownScheme(e) => write!(f, "unknown scheme: {}", e),

@@ -67,7 +67,7 @@ pub fn encode_into_bmcf(input: &str) -> RcryptResult<Vec<u8>> {
     // the cost
     let cost: u8 = parts[1]
         .parse()
-        .map_err(|_| RcryptError::BadCost(parts[1].to_owned()))?;
+        .map_err(|_| RcryptError::BadDecodedCost(parts[1].to_owned()))?;
     // the salt (22-bytes)
     let salt = &parts[2][0..22];
     // the digest (31-bytes)
@@ -114,7 +114,7 @@ pub fn decode_into_mcf(input: &[u8]) -> RcryptResult<String> {
     // get cost
     let costint = header_octet - scheme_id;
     if costint > 31 {
-        return Err(RcryptError::BadCost(format!(
+        return Err(RcryptError::BadDecodedCost(format!(
             "expected cost is 4-31, found {}",
             costint
         )));
@@ -242,7 +242,7 @@ pub fn rcrypt_verify(password: &[u8], hash: &[u8]) -> RcryptResult<bool> {
     // the cost
     let costint = header_octet - scheme_id;
     if (costint as u32) > MAX_COST || (costint as u32) < MIN_COST {
-        return Err(RcryptError::BadCost(format!(
+        return Err(RcryptError::BadDecodedCost(format!(
             "Expected cost in {min}-{max}, got {cost}",
             min = MIN_COST,
             max = MAX_COST,
