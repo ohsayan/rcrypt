@@ -13,5 +13,6 @@ categories = ["cryptography", "algorithms"]
 keywords = ["bcrypt", "hash", "salt", "bmcf", "mcf"]
 
 [dependencies]
-base64 = "0.13.0"
-bcrypt = "0.10.1"
+base64 = "0.13"
+getrandom = "0.2"
+blowfish = { version = "0.9", features = ["bcrypt"] }
