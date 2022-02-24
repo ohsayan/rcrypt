@@ -150,7 +150,7 @@ fn rcrypt_genhash(password: &[u8], cost: u32, salt: &[u8]) -> RcryptResult<Diges
         return Err(RcryptError::BadSalt(salt.len()));
     }
     // check if string has null
-    if password.contains(&b'0') || password.is_empty() {
+    if password.contains(&0) || password.is_empty() {
         return Err(RcryptError::BadPassword);
     }
     // truncate the password if > 72 to 71, because we need to also add the NULL terminator
