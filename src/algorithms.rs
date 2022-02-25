@@ -156,12 +156,12 @@ fn rcrypt_genhash(password: &[u8], cost: u32, salt: &[u8]) -> RcryptResult<Diges
     // truncate the password if > 72 to 71, because we need to also add the NULL terminator
     // due to a bug with C bcrypt impls (see: https://go-review.googlesource.com/c/crypto/+/177818)
     let trunc_password = if password.len() > 72 {
-        &password[..71]
+        &password[..72]
     } else {
         &password
     };
     // generate the null terminated password
-    let mut null_terminated_password = Vec::with_capacity(password.len() + 1);
+    let mut null_terminated_password = Vec::with_capacity(trunc_password.len() + 1);
     null_terminated_password.extend(trunc_password);
     null_terminated_password.push(0);
     // this is the output digest

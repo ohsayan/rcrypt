@@ -22,6 +22,18 @@ assert!(rcrypt::verify(&mypass, &hash).unwrap());
 
 The usage remains just the same for users who use the [bcrypt](https://crates.io/crates/bcrypt) crate, except that the `hash` method returns a `Vec<u8>` instead of a `String`, while for the `verify` method you need to pass a `&[u8]` for the hash.
 
+## Getting back your bcrypt hash
+
+If for some reason you need a `String` with the bcrypt hash from your rcrypt hash, you can do that too!
+Here's the procedure:
+
+```rust
+use rcrypt::DEFAULT_COST;
+let rhash = rcrypt::hash("mypassword", DEFAULT_COST).unwrap();
+// now let's get the bcrypt hash from the rcrypt hash
+let bhash = rcrypt::bmcf::decode_into_mcf(&rhash).unwrap();
+```
+
 ## How it works
 
 The smaller hash sizes result by `rcrypt` producing binary hashes and merging hash fields, in accordance

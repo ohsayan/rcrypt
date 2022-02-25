@@ -40,6 +40,16 @@
 //!
 //! The rest remains unchanged.
 //!
+//! ## Getting back your bcrypt hash
+//!
+//! If for some reason you need a [`String`] with the bcrypt hash, you can do that too!
+//! Here's the procedure:
+//! ```
+//! use rcrypt::DEFAULT_COST;
+//! let rhash = rcrypt::hash("mypassword", DEFAULT_COST).unwrap();
+//! // now let's get the bcrypt hash from the rcrypt hash
+//! let bhash = rcrypt::bmcf::decode_into_mcf(&rhash).unwrap();
+//! ```
 
 /// The default hash cost
 pub const DEFAULT_COST: u32 = 12;
