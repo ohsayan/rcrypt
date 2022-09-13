@@ -12,6 +12,10 @@ readme = "README.md"
 categories = ["cryptography", "algorithms"]
 keywords = ["bcrypt", "hash", "salt", "bmcf", "mcf"]
 
+[features]
+#Enable this feature to support wasm32-unknown-unknown target
+js = ["getrandom/js"]
+
 [dependencies]
 base64 = "0.13"
 getrandom = "0.2"
